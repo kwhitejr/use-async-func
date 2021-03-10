@@ -1,15 +1,15 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import useAsyncFn from '../use-async-func';
+import useAsyncFunc from '../use-async-func';
 
-describe('useAsyncFn', () => {
+describe('useAsyncFunc', () => {
   it('should provide initial and success state', async () => {
     const mockAsyncFn = () => {
       setTimeout(() => { }, 500);
       return Promise.resolve('foo');
     };
-    const { result, waitForNextUpdate } = renderHook(() => useAsyncFn(mockAsyncFn));
-    // useAsyncFn returns [state, setArgs]
+    const { result, waitForNextUpdate } = renderHook(() => useAsyncFunc(mockAsyncFn));
+    // useAsyncFunc returns [state, setArgs]
     expect(result.current[0]).toMatchObject({
       isLoading: true,
       isError: false,
@@ -28,7 +28,7 @@ describe('useAsyncFn', () => {
       setTimeout(() => { }, 500);
       return Promise.resolve(++int);
     };
-    const { result, waitForNextUpdate } = renderHook(() => useAsyncFn(mockAsyncIncrementFn, [5]));
+    const { result, waitForNextUpdate } = renderHook(() => useAsyncFunc(mockAsyncIncrementFn, [5]));
     expect(result.current[0]).toMatchObject({
       isLoading: true,
       isError: false,
@@ -42,9 +42,13 @@ describe('useAsyncFn', () => {
     });
   });
 
-  it('should accept default data', async () => {
+  it.skip('should accept default data', async () => {
+    //
+  });
+
+  it('should return an error state upon failure', async () => {
     const mockAsyncFnWithError = jest.fn().mockImplementation(() => Promise.reject());
-    const { result, waitForNextUpdate } = renderHook(() => useAsyncFn(mockAsyncFnWithError));
+    const { result, waitForNextUpdate } = renderHook(() => useAsyncFunc(mockAsyncFnWithError));
     expect(result.current[0]).toMatchObject({
       isLoading: true,
       isError: false,
